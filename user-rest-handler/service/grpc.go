@@ -1,3 +1,3 @@
-package handler
+package service
 
 func GrpcHandler() {}

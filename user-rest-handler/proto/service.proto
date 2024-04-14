@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package service;
 
-option go_package = "handler/proto";
+option go_package = "head-api/proto";
 
 // CommonRequest: Set range `from`, `to`
 message CommonRequest {
