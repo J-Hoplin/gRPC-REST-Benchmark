@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package service;
 
-option go_package = "grpc-rest/proto";
+option go_package = "grpc-service/proto";
 
 // CommonRequest: Set range `from`, `to`
 message CommonRequest {

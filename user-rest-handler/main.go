@@ -29,7 +29,6 @@ func main() {
 	router := gin.Default()
 
 	// Enroll Router
-
 	handler.EnrollRestHandler(router)
 	handler.EnrollGrpcHandler(router)
 
