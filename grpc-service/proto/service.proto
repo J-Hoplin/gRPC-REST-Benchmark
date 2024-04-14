@@ -6,8 +6,7 @@ option go_package = "grpc-rest/proto";
 
 // CommonRequest: Set range `from`, `to`
 message CommonRequest {
-    int64 from = 1;
-    int64 to = 2;
+    int64 to = 1;
 }
 
 
