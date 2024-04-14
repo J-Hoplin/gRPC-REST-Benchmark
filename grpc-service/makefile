@@ -15,7 +15,6 @@ else
 	$(error OS not supported by this Makefile)
 endif
 PACKAGE = $(shell head -1 go.mod | awk '{print $$2}')
-CHECK_DIR_CMD = test -d $@ || (echo "\033[31mDirectory $@ doesn't exist\033[0m" && false)
 HELP_CMD = grep -E '^[a-zA-Z_-]+:.*?\#\# .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?\#\# "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 RM_F_CMD = rm -f
 RM_RF_CMD = ${RM_F_CMD} -r
@@ -31,10 +30,8 @@ all: $(project)
 service: $@
 
 $(project):
-	@${CHECK_DIR_CMD}
-	protoc -I$@/${PROTO_DIR} --go_opt=module=${PACKAGE} --go_out=. --go-grpc_opt=module=${PACKAGE} --go-grpc_out=. $@/${PROTO_DIR}/*.proto
-	go build -o ${BIN_DIR}/$@/${SERVER_BIN} ./$@/${SERVER_DIR}
-	go build -o ${BIN_DIR}/$@/${CLIENT_BIN} ./$@/${CLIENT_DIR}
+	protoc -I${PROTO_DIR} --go_opt=module=${PACKAGE} --go_out=. --go-grpc_opt=module=${PACKAGE} --go-grpc_out=. ${PROTO_DIR}/*.proto
+	go build -o ${BIN_DIR}/server main.go
 
 test: all ## Launch tests
 	go test ./...
