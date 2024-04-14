@@ -20,10 +20,9 @@ func main() {
 
 	/*
 		< Request >
-		/request?from=1&to=2
+		/request?to=2
 
 		[ Query Parameter ]
-		- from: number
 		- to: number
 	*/
 	http.HandleFunc("/request", RestRequestHandler)
@@ -43,7 +42,7 @@ func RestRequestHandler(w http.ResponseWriter, r *http.Request) {
 	// Error
 	var err error
 	// Query Params
-	var from, to, sumAll int
+	var to, sumAll int
 	// Response struct
 	var response *RestResponse = new(RestResponse)
 	// JSON byteArray
@@ -52,21 +51,13 @@ func RestRequestHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		// Parse Query & Validate
-		if from, err = strconv.Atoi(r.URL.Query().Get("from")); err != nil {
-			http.Error(w, "Validation Fail: Query 'from' should be type 'int'", http.StatusBadRequest)
-			return
-		}
 		if to, err = strconv.Atoi(r.URL.Query().Get("to")); err != nil {
 			http.Error(w, "Validation Fail: Query 'to' should be type 'int'", http.StatusBadRequest)
 			return
 		}
-		if from > to {
-			http.Error(w, "Validation Fail: Query 'from' should be lower than Query 'to'", http.StatusBadRequest)
-			return
-		}
 
 		// Add all of the doubled numbers
-		for i := from; i < to; i++ {
+		for i := 0; i < to; i++ {
 			sumAll += i * i
 		}
 
