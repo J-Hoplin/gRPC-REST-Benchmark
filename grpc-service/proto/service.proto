@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package service;
+
+option go_package = "grpc-rest/proto";
+
+// CommonRequest: Set range `from`, `to`
+message CommonRequest {
+    int64 from = 1;
+    int64 to = 2;
+}
+
+
+// CommonResponse: Calculate response
+message CommonResponse {
+    int64 responseNumber = 1;
+}
+
+service CommonService {
+    rpc UnaryCommunication(CommonRequest) returns (CommonResponse);
+    rpc ClientStreamingCommunication(stream CommonRequest) returns (CommonResponse);
+    rpc ServerStreamingCommunication(CommonRequest) returns (stream CommonResponse);
+    rpc BiDirectionalCommunication(stream CommonRequest) returns (stream CommonResponse);
+}
