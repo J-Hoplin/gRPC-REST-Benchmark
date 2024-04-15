@@ -67,14 +67,12 @@ func (s *CommonServiceServer) ClientStreamingCommunication(stream proto.CommonSe
 
 // Implement Server stream communication
 func (s *CommonServiceServer) ServerStreamingCommunication(input *proto.ServerStreamRequest, stream proto.CommonService_ServerStreamingCommunicationServer) error {
-	// Get arrays from client
-	var tos = input.Tos
+
 	// Error
 	var err error
-
-	for _, val := range tos {
+	for from := input.From; from < input.To; from++ {
 		var sumAll = 0
-		for i := 0; i < int(val); i++ {
+		for i := 0; i < int(from); i++ {
 			sumAll += i * i
 		}
 		err = stream.Send(&proto.CommonResponse{

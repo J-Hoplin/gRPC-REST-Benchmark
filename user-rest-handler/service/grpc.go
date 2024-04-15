@@ -132,7 +132,7 @@ func ServerStreamHandler(ctx *gin.Context) {
 	// Query string
 	var qs = new(CommonQuery)
 	// Array list
-	// var results = []int{}
+	var results = []int{}
 	// Bind querystring to struct
 	if err = ctx.ShouldBindQuery(qs); err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -147,8 +147,27 @@ func ServerStreamHandler(ctx *gin.Context) {
 	}
 	// Gurantee that connection will be closed
 	defer client.Connection.Close()
-
 	client.GenerateClient()
+	stream, err := client.Client.ServerStreamingCommunication(context.Background(), &proto.ServerStreamRequest{
+		From: qs.From,
+		To:   qs.To,
+	})
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Fail while receiving value from server: %v", err)})
+		return
+	}
+	for {
+		recv, err := stream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Fail while receiving value from server: %v", err)})
+			return
+		}
+		results = append(results, int(recv.ResponseNumber))
+	}
+	ctx.JSON(http.StatusOK, gin.H{"datas": results})
 }
 
 func BiDirectionalStreamHandler(ctx *gin.Context) {
