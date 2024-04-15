@@ -12,7 +12,7 @@ type CommonServiceServer struct {
 }
 
 // Implement Unary Communication
-func UnaryCommunication(ctx context.Context, input *proto.CommonRequest) (*proto.CommonResponse, error) {
+func (s *CommonServiceServer) UnaryCommunication(ctx context.Context, input *proto.CommonRequest) (*proto.CommonResponse, error) {
 	to := input.To
 	var sumAll, i int64
 	var response = new(proto.CommonResponse)
@@ -25,7 +25,7 @@ func UnaryCommunication(ctx context.Context, input *proto.CommonRequest) (*proto
 }
 
 // Implement Client Streaming communication
-func ClientStreamingCommunication(stream proto.CommonService_ClientStreamingCommunicationServer) error {
+func (s *CommonServiceServer) ClientStreamingCommunication(stream proto.CommonService_ClientStreamingCommunicationServer) error {
 	// Error
 	var err error
 	// Received
@@ -65,7 +65,7 @@ func ClientStreamingCommunication(stream proto.CommonService_ClientStreamingComm
 }
 
 // Implement Server stream communication
-func ServerStreamingCommunication(input *proto.ServerStreamRequest, stream proto.CommonService_ServerStreamingCommunicationServer) error {
+func (s *CommonServiceServer) ServerStreamingCommunication(input *proto.ServerStreamRequest, stream proto.CommonService_ServerStreamingCommunicationServer) error {
 	// Get arrays from client
 	var tos = input.Tos
 	// Error
@@ -86,4 +86,35 @@ func ServerStreamingCommunication(input *proto.ServerStreamRequest, stream proto
 
 	// End stream
 	return nil
+}
+
+func (s *CommonServiceServer) BiDirectionalCommunication(stream proto.CommonService_BiDirectionalCommunicationServer) error {
+	// Error
+	var err error
+
+	// Received Type
+	var recv *proto.CommonRequest
+
+	for {
+		recv, err = stream.Recv()
+
+		// If client end stream
+		if err == io.EOF {
+			return nil
+		}
+		if err != nil {
+			log.Fatalf("Error while bi-directional stream: %v\n", err)
+		}
+		var sumAll = 0
+		for i := 0; i < int(recv.To); i++ {
+			sumAll += i * i
+		}
+		err = stream.Send(&proto.CommonResponse{
+			ResponseNumber: int64(sumAll),
+		})
+
+		if err != nil {
+			log.Fatalf("Error while sending response to stream: %v\n", err)
+		}
+	}
 }
