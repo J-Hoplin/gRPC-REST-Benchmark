@@ -24,6 +24,7 @@ func UnaryCommunication(ctx context.Context, input *proto.CommonRequest) (*proto
 	return response, nil
 }
 
+// Implement Client Streaming communication
 func ClientStreamingCommunication(stream proto.CommonService_ClientStreamingCommunicationServer) error {
 	// Error
 	var err error
@@ -49,9 +50,8 @@ func ClientStreamingCommunication(stream proto.CommonService_ClientStreamingComm
 
 		// Initialize sumAll to 0
 		sumAll = 0
-		var i int64 = 0
-		for ; i < recv.To; i++ {
-			sumAll += i * i
+		for i := 0; i < int(recv.To); i++ {
+			sumAll += int64(i * i)
 		}
 
 		responseNumbers = append(responseNumbers, sumAll)
@@ -61,5 +61,29 @@ func ClientStreamingCommunication(stream proto.CommonService_ClientStreamingComm
 	stream.SendAndClose(&proto.ClientStreamResponse{
 		ResponseNumbers: responseNumbers,
 	})
+	return nil
+}
+
+// Implement Server stream communication
+func ServerStreamingCommunication(input *proto.ServerStreamRequest, stream proto.CommonService_ServerStreamingCommunicationServer) error {
+	// Get arrays from client
+	var tos = input.Tos
+	// Error
+	var err error
+
+	for _, val := range tos {
+		var sumAll = 0
+		for i := 0; i < int(val); i++ {
+			sumAll += i * i
+		}
+		err = stream.Send(&proto.CommonResponse{
+			ResponseNumber: int64(sumAll),
+		})
+		if err != nil {
+			log.Fatalf("Error while sending message to client through stream: %v\n", err)
+		}
+	}
+
+	// End stream
 	return nil
 }
