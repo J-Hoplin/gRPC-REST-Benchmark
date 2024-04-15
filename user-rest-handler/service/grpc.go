@@ -83,7 +83,17 @@ func UnaryHandler(ctx *gin.Context) {
 
 func ClientStreamHandler(ctx *gin.Context) {
 	var client *ServiceClient
+	// Error
 	var err error
+
+	// Query string
+	var qs = new(CommonQuery)
+
+	// Bind querystring to struct
+	if err = ctx.ShouldBindQuery(qs); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	// Generate connection
 	client, err = GetGrpcConnection()
@@ -94,11 +104,40 @@ func ClientStreamHandler(ctx *gin.Context) {
 	// Gurantee that connection will be closed
 	defer client.Connection.Close()
 	client.GenerateClient()
+
+	stream, clientStreamErr := client.Client.ClientStreamingCommunication(context.Background())
+	if clientStreamErr != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Fail to initialize stream: %v", err)})
+	}
+
+	// Send numbers to server as stream
+	for i := qs.From; i < qs.To; i++ {
+		stream.Send(&proto.CommonRequest{
+			To: i,
+		})
+	}
+
+	// End stream and receive result
+	streamResponse, serverResponseError := stream.CloseAndRecv()
+	if serverResponseError != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Fail to get response from server: %v", err)})
+	}
+	ctx.JSON(http.StatusOK, gin.H{"datas": streamResponse.ResponseNumbers})
 }
 
 func ServerStreamHandler(ctx *gin.Context) {
 	var client *ServiceClient
 	var err error
+
+	// Query string
+	var qs = new(CommonQuery)
+	// Array list
+	// var results = []int{}
+	// Bind querystring to struct
+	if err = ctx.ShouldBindQuery(qs); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	// Generate connection
 	client, err = GetGrpcConnection()
@@ -108,6 +147,7 @@ func ServerStreamHandler(ctx *gin.Context) {
 	}
 	// Gurantee that connection will be closed
 	defer client.Connection.Close()
+
 	client.GenerateClient()
 }
 
