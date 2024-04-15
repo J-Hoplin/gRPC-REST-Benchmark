@@ -4,6 +4,8 @@ package service;
 
 option go_package = "head-api/proto";
 
+// Unary Communication and Bi-Directional Communication
+
 // CommonRequest: Set range `from`, `to`
 message CommonRequest {
     int64 to = 1;
@@ -15,9 +17,21 @@ message CommonResponse {
     int64 responseNumber = 1;
 }
 
+// Client stream
+message ClientStreamResponse{
+    repeated int64 responseNumbers = 1;
+}
+
+// Server stream
+message ServerStreamRequest{
+    repeated int64 tos = 1;
+}
+
+
+
 service CommonService {
     rpc UnaryCommunication(CommonRequest) returns (CommonResponse);
-    rpc ClientStreamingCommunication(stream CommonRequest) returns (CommonResponse);
-    rpc ServerStreamingCommunication(CommonRequest) returns (stream CommonResponse);
+    rpc ClientStreamingCommunication(stream CommonRequest) returns (ClientStreamResponse);
+    rpc ServerStreamingCommunication(ServerStreamRequest) returns (stream CommonResponse);
     rpc BiDirectionalCommunication(stream CommonRequest) returns (stream CommonResponse);
 }

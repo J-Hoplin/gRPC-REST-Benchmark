@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"grpc-service/proto"
+	service "grpc-service/rpc-service"
 	"log"
 	"net"
 
@@ -12,10 +13,6 @@ import (
 // Host
 var port int = 8082
 
-type CommonServiceServer struct {
-	proto.CommonServiceServer
-}
-
 /*실험환경에서는 Insecure SSL을 통해 진행을 한다는점 알아두시기 바랍니다.*/
 func main() {
 	// Error
@@ -23,7 +20,7 @@ func main() {
 	// Server listener
 	var listener net.Listener
 	// Common Service Server struct address
-	commonServices := new(CommonServiceServer)
+	commonServices := new(service.CommonServiceServer)
 
 	var host = fmt.Sprintf(":%v", port)
 
