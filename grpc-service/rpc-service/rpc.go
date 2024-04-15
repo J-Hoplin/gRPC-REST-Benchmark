@@ -13,6 +13,7 @@ type CommonServiceServer struct {
 
 // Implement Unary Communication
 func (s *CommonServiceServer) UnaryCommunication(ctx context.Context, input *proto.CommonRequest) (*proto.CommonResponse, error) {
+
 	to := input.To
 	var sumAll, i int64
 	var response = new(proto.CommonResponse)
