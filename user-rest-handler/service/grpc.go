@@ -35,7 +35,6 @@ func GetGrpcConnection() (*ServiceClient, error) {
 	var conn *grpc.ClientConn
 
 	serverClient := new(ServiceClient)
-
 	conn, err = grpc.Dial(os.Getenv("GRPC_REQUEST_ENDPOINT"), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	serverClient.Connection = conn
 
