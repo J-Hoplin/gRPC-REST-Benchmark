@@ -1,5 +1,10 @@
 FROM golang:1.21-bullseye
 
+# Require two environment variable
+
+# REST_REQUEST_ENDPOINT
+# GRPC_REQUEST_ENDPOINT
+
 WORKDIR /app
 COPY . .
 

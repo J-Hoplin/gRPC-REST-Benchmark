@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
@@ -35,7 +36,7 @@ func GetGrpcConnection() (*ServiceClient, error) {
 
 	serverClient := new(ServiceClient)
 
-	conn, err = grpc.NewClient(":8082", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err = grpc.Dial(os.Getenv("GRPC_REQUEST_ENDPOINT"), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	serverClient.Connection = conn
 
 	return serverClient, err
