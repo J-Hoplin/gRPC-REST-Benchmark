@@ -1,9 +1,23 @@
-# Benchmark RESTful API and gRPC
+# Benchmark REST API and gRPC
+
+## Diagram
+
+![img](./img/1.png)
+
+## Benchmark Test
+
+1. User ranges through `from` and `to`.
+
+2. Entrypoint server traverses `from` to `to` and sends each number to the destination server.
+
+3. Destination server returns an additional number by squaring each number from 1 to the number it received.
+
+4. Entrypoint server returns all the response values after they are placed in the array
 
 ## REST API endpoints
 
 <details>
-<summary>Endpoints list for benchmark</summary>
+<summary>Endpoint list for benchmark</summary>
 
 - `/rest`: Request to REST API ser
 
@@ -73,6 +87,14 @@
 </details>
 
 ## Run benchmark environment with Docker-Compose
+
+### It's good to know...
+
+- `service0`: REST API which user will send request(Benchmark entrypoint server)
+- `service1`: gRPC server, communicate with `service0`. Include Unary, Client Stream, Server Stream communication.
+- `service2`: REST API server, communicate with `service0`
+
+### Start environment
 
 1. Run `docker-compose.yaml` in root directory
 
