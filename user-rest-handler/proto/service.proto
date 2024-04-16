@@ -24,10 +24,9 @@ message ClientStreamResponse{
 
 // Server stream
 message ServerStreamRequest{
-    repeated int64 tos = 1;
+    int64 from = 1;
+    int64 to = 2;
 }
-
-
 
 service CommonService {
     rpc UnaryCommunication(CommonRequest) returns (CommonResponse);

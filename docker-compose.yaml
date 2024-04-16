@@ -1,18 +1,53 @@
 version: "3.7"
 
 services:
-  influxdb:
-    image: bitnami/influxdb:1.8.5
-    container_name: influxdb
-    ports:
-      - "8086:8086"
-      - "8085:8088"
+  service0:
+    container_name: user-rest-api
+    restart: unless-stopped
+    image: rest-api
+    build:
+      context: ./user-rest-handler
+      dockerfile: Dockerfile
     environment:
-      - INFLUXDB_ADMIN_USER_PASSWORD=hoplin1234!
-      - INFLUXDB_ADMIN_USER_TOKEN=hoplin1234!
-      - INFLUXDB_HTTP_AUTH_ENABLED=false
-      - INFLUXDB_DB=myk6db
-  granafa:
-    image: bitnami/grafana:latest
+      - "TZ=Asia/Seoul"
+      - "REST_REQUEST_ENDPOINT=http://service2:8081"
+      - "GRPC_REQUEST_ENDPOINT=service1:8082"
     ports:
-      - "3000:3000"
+      - "8080:8080"
+    depends_on:
+      - service1
+      - service2
+    networks:
+      - service-network
+
+  service1:
+    container_name: grpc-service
+    restart: always
+    image: grpc-service
+    build:
+      context: ./grpc-service
+      dockerfile: Dockerfile
+    environment:
+      - "TZ=Asia/Seoul"
+    ports:
+      - "8082:8082"
+    networks:
+      - service-network
+
+  service2:
+    container_name: rest-service
+    restart: always
+    image: rest-service
+    build:
+      context: ./rest-service
+      dockerfile: Dockerfile
+    environment:
+      - "TZ=Asia/Seoul"
+    ports:
+      - "8081:8081"
+    networks:
+      - service-network
+
+networks:
+  service-network:
+    driver: bridge
