@@ -1352,6 +1352,7 @@
                   "type": "fill"
                 }
               ],
+              "timeFrom": "now-2m",
               "measurement": "http_req_duration",
               "orderByTime": "ASC",
               "policy": "default",
