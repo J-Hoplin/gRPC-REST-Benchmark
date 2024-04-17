@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"head-api/handler"
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -27,6 +28,11 @@ func main() {
 
 	// Using default to make logger and recovery middleware attached to application
 	router := gin.Default()
+
+	// Ping
+	router.GET("/ping", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{"message": "pong"})
+	})
 
 	// Enroll Router
 	handler.EnrollRestHandler(router)
