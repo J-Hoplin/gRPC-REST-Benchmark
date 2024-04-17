@@ -12,6 +12,8 @@ services:
       - INFLUXDB_ADMIN_USER_TOKEN=hoplin1234!
       - INFLUXDB_HTTP_AUTH_ENABLED=false
       - INFLUXDB_DB=k6db
+    volumes:
+      - ./influx-setup.sh:/docker-entrypoint-initdb.d/init_influxdb.sh
   granafa:
     image: bitnami/grafana:latest
     environment:
