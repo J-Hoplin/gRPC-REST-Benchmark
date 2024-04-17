@@ -1,10 +1,15 @@
-# Benchmark REST API and gRPC
+# Benchmark REST API and gRPC - Stress test
 
 ## Diagram
 
+<details>
+<summary>Diagram</summary>
+
 ![img](./img/1.png)
 
-## Benchmark Test
+</details>
+
+## Benchmark Test Assumption
 
 1. User ranges through `from` and `to`.
 
@@ -86,7 +91,10 @@
 
 </details>
 
-## Run benchmark environment with Docker-Compose
+## Set up Benchmark Environment
+
+<details>
+<summary>Set up benchmark with docker-compose environment</summary>
 
 ### It's good to know...
 
@@ -104,7 +112,10 @@
 
 2. REST API's location is `localhost:8080`. Make sure port `8080` is not in used.(You can modify port in `docker-compose.yaml`)
 
-## Run benchmark environment in local
+</details>
+
+<details>
+<summary>Set up benchmark with local Golang compile</summary>
 
 ### Make sure these dependencies to be installed
 
@@ -144,3 +155,33 @@
         ./bin/server
 
         ```
+
+</details>
+
+## Setup benchmark environment and visualization
+
+### In used
+
+- Docker-Compose environment
+- Stress test tool: Grafana Lab K6
+- Visualization: Grafana
+- TSDB: Influx DB
+
+### Provisioned
+
+**Warning: Benchmark docker environment are fully provisioned. Unexpected modifications can ruin an existing provisioned environment.**
+
+<details>
+<summary>If you first initialize grafana docker-compose...</summary>
+
+![](./img/2.png)
+![](./img/3.png)
+
+</details>
+
+- Dashboard for each endpoint
+- Influx DB Datasource connection
+
+### Modify stress test code
+
+Currently, only the most basic stress test codes are written in this repository. If you want to change the stress test code, modify k6 scripts located in `benchmark/script/**/*.k6.js` files. I recommend to run load test with `**/start.sh`, for grafana visualization.
