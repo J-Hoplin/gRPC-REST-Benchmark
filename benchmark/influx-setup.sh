@@ -7,6 +7,7 @@ sleep 2
 
 set -e
 
+influx -execute 'CREATE DATABASE "ping"'
 influx -execute 'CREATE DATABASE "rest-call"'
 influx -execute 'CREATE DATABASE "unary-call"'
 influx -execute 'CREATE DATABASE "client-call"'
