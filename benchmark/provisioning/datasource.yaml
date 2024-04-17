@@ -1,0 +1,66 @@
+apiVersion: 1
+
+datasources:
+  # Service 2
+  - name: REST-API-Call
+    type: influxdb
+    access: proxy
+    orgId: 1
+    url: http://influxdb:8086
+    database: rest-call
+    user: admin
+    password: hoplin1234!
+    jsonData:
+      timeInterval: "5s"
+    isDefault: false
+  # Service 1
+  - name: gRPC-Unary-Communication
+    type: influxdb
+    access: proxy
+    orgId: 1
+    url: http://influxdb:8086
+    database: unary-call
+    user: admin
+    password: hoplin1234!
+    jsonData:
+      timeInterval: "5s"
+    isDefault: false
+
+  # Service 1
+  - name: gRPC-Client-Stream-Communication
+    type: influxdb
+    access: proxy
+    orgId: 1
+    url: http://influxdb:8086
+    database: client-call
+    user: admin
+    password: hoplin1234!
+    jsonData:
+      timeInterval: "5s"
+    isDefault: false
+
+  # Service 1
+  - name: gRPC-Server-Stream-Communication
+    type: influxdb
+    access: proxy
+    orgId: 1
+    url: http://influxdb:8086
+    database: server-call
+    user: admin
+    password: hoplin1234!
+    jsonData:
+      timeInterval: "5s"
+    isDefault: false
+
+  # Service 1
+  - name: gRPC-Bi-Directional-Stream-Communication
+    type: influxdb
+    access: proxy
+    orgId: 1
+    url: http://influxdb:8086
+    database: bi-call
+    user: admin
+    password: hoplin1234!
+    jsonData:
+      timeInterval: "5s"
+    isDefault: false
