@@ -2,8 +2,7 @@
 
 ## Diagram
 
-![img](./img/1.png)
-
+<img src="./img/1.png" width="550" height="400">
 
 ## Benchmark Test Assumption
 
