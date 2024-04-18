@@ -2,12 +2,8 @@
 
 ## Diagram
 
-<details>
-<summary>Diagram</summary>
-
 ![img](./img/1.png)
 
-</details>
 
 ## Benchmark Test Assumption
 
@@ -122,6 +118,15 @@
 - Golang with version 1.18 or upper
 - `make` utility(For makefile)
 - `protoc`, which is compiler of protobuf
+
+### Install go dependencies for `protoc` Golang plugin and update PATH
+
+```bash
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+export PATH="$PATH:$(go env GOPATH)/bin"
+```
+
 
 ### Start environment
 
