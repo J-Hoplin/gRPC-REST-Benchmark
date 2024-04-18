@@ -73,7 +73,8 @@ func UnaryHandler(ctx *gin.Context) {
 			To: i,
 		})
 		if err != nil {
-			log.Fatalf("Fail while processing: %v", err)
+			ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Fail while processing: %v", err)})
+			return
 		}
 		results = append(results, int(res.ResponseNumber))
 	}
@@ -198,7 +199,8 @@ func BiDirectionalStreamHandler(ctx *gin.Context) {
 	// Get stream
 	stream, streamErr := client.Client.BiDirectionalCommunication(context.Background())
 	if streamErr != nil {
-		log.Fatalf("Error while generating stream: %v", streamErr)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Error while generating stream: %v", streamErr)})
+		return
 	}
 
 	// Generate channel to block context
