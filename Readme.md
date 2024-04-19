@@ -184,4 +184,4 @@
 
 ### Modify stress test code
 
-Currently, only the most basic stress test codes are written in this repository. If you want to change the stress test code, modify k6 scripts located in `benchmark/script/**/*.k6.js` files. I recommend to run load test with `**/start.sh`, for grafana visualization.
+Currently, only the most basic stress test codes are written in this repository. If you want to change the stress test code, modify k6 scripts located in `benchmark/script/script.k6.js` files.
