@@ -7,6 +7,6 @@ export const options = {
 };
 
 export default function () {
-  http.get("http://localhost:8080/grpc/stream/client?from=1&to=100");
+  http.get(__ENV.ENDPOINT);
   sleep(1);
 }
