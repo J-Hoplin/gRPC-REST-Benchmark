@@ -14,6 +14,20 @@
 
 4. Entrypoint server returns all the response values after they are placed in the array
 
+```python
+# Pseudo Code
+
+
+# Request through user-side REST API
+for each from in range(From, To){
+
+  # Service after REST API
+  for each i in range(0, from){
+    sumAll += i * i
+  }
+}
+```
+
 ## REST API endpoints
 
 <details>
@@ -125,7 +139,6 @@ go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 export PATH="$PATH:$(go env GOPATH)/bin"
 ```
-
 
 ### Start environment
 
